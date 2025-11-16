@@ -1,0 +1,15 @@
+{
+  "name": "blocksdirecte",
+  "version": "0.0.1-alpha",
+  "description": "A Wrapper for EcoleDirecte",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "example:login": "bun run --env-file=examples/.env examples/login.ts"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^5.5.3",
+    "ts-node": "^10.9.2"
+  }
+}
