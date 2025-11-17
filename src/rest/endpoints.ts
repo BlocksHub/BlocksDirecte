@@ -34,8 +34,8 @@ export const POLLS_GET = () => '/v3/rdt/sondages.awp?verbe=get';
 /* Modules - Timeline                                              */
 /* *************************************************************** */
 
-export const TIMELINE_GET = (account_kind: AccountKind, account_id: number) => `/v3/${decodeAccountKind(account_kind)}/${account_id}/timeline.awp?verbe=get`;
-export const TIMELINE_GET_COMMON = () => (account_kind: AccountKind, account_id: number) => `/v3/${decodeAccountKind(account_kind)}/${account_id}/timelineAccueilCommun.awp?verbe=get`;
+export const TIMELINE_GET_PRIVATE = (account_kind: AccountKind, account_id: number) => `/v3/${decodeAccountKind(account_kind)}/${account_id}/timeline.awp?verbe=get`;
+export const TIMELINE_GET_PUBLIC = (account_kind: AccountKind, account_id: number) => `/v3/${decodeAccountKind(account_kind)}/${account_id}/timelineAccueilCommun.awp?verbe=get`;
 
 /* *************************************************************** */
 /* Modules - Forms                                                 */

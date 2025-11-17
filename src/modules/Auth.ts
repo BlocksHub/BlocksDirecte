@@ -10,6 +10,8 @@ import {decodeBase64JSON} from "../utils/json";
 import {DoubleAuthResult} from "../types/DoubleAuthResult";
 import {encodeBase64} from "../utils/base64";
 import {BadAnswer2FA} from "../errors/BadAnswer2FA";
+import {InvalidAccountSelected} from "../errors/InvalidAccountSelected";
+import {Account} from "../types/Account";
 
 export class AuthModules extends Modules {
     public async loginUsername(
@@ -20,9 +22,8 @@ export class AuthModules extends Modules {
         isRelogin?: boolean,
         keepSessionOpen?: boolean,
         deviceUUID?: string
-    ): Promise<AuthentificationCredentialWithToken>
-    {
-        if ((!cnKey && cvKey) || (cnKey && !cvKey)) throw new Invalid2FAKey(`Missing ${(!cnKey && cvKey) ? "cnKey":"cvKey"}. You must provide both cnKey and cvKey`)
+    ): Promise<AuthentificationCredentialWithToken> {
+        if ((!cnKey && cvKey) || (cnKey && !cvKey)) throw new Invalid2FAKey(`Missing ${(!cnKey && cvKey) ? "cnKey" : "cvKey"}. You must provide both cnKey and cvKey`)
 
         const res: ServerResponse<AuthentificationCredential> = await this.restManager.post<AuthentificationCredential>(
             AUTH_LOGIN(),
@@ -38,11 +39,13 @@ export class AuthModules extends Modules {
         );
 
         switch (res.code) {
-            case 250: throw new Require2FA("Your account require 2FA to login.", res.headers.get("x-token")!);
-            case 505: throw new InvalidCredentials("Username or password is invalid.");
+            case 250:
+                throw new Require2FA("Your account require 2FA to login.", res.headers.get("x-token")!);
+            case 505:
+                throw new InvalidCredentials("Username or password is invalid.");
             default:
-                Object.assign(this.credentials, { token: res.token });
-                return { ...res.data, token: res.token }
+                Object.assign(this.credentials, {token: res.token, accounts: res.data.accounts});
+                return {...res.data, token: res.token}
         }
     }
 
@@ -50,7 +53,7 @@ export class AuthModules extends Modules {
         const res: ServerResponse<DoubleAuthQuestions> = await this.restManager.post(
             AUTH_2FA_GET(),
             {},
-            { "X-Token": token }
+            {"X-Token": token}
         );
 
         if (res.code === 520) throw new Invalid2FAKey(`Token is invalid.`);
@@ -64,14 +67,26 @@ export class AuthModules extends Modules {
             {
                 choix: encodeBase64(response),
             },
-            { "X-Token": token }
+            {"X-Token": token}
         );
 
         switch (res.code) {
-            case 505: throw new BadAnswer2FA("The response you provided is invalid.");
-            case 520: throw new Invalid2FAKey(`Token is invalid.`);
+            case 505:
+                throw new BadAnswer2FA("The response you provided is invalid.");
+            case 520:
+                throw new Invalid2FAKey(`Token is invalid.`);
             default:
                 return res.data;
         }
+    }
+
+    public setAccount(index: number) {
+        if (index < 0 || index > this.credentials.accounts.length) throw new InvalidAccountSelected("Invalid account can't be found in the accounts list. Make sur to login first.");
+        Object.assign(this.credentials, {selectedAccounts: index});
+    }
+
+    public getAccount(): Account {
+        this.checkSelectedAccount();
+        return (this.credentials.accounts[this.credentials.selectedAccounts]);
     }
 }

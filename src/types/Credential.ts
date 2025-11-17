@@ -1,7 +1,7 @@
-import AccountKind from "./AccountKind";
+import {Account} from "./Account";
 
 export interface Credential {
     token?: string;
-    accountId?: number;
-    accountType?: AccountKind;
+    accounts: Account[];
+    selectedAccounts: number;
 }
