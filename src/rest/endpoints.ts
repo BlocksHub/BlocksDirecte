@@ -53,3 +53,5 @@ export const TIMETABLE_ICS_GET = (account_kind: AccountKind, account_id: number)
 /* *************************************************************** */
 /* Modules - School Life                                           */
 /* *************************************************************** */
+
+export const SCHOOLLIFE_GET = (account_kind: AccountKind, account_id: number) => `/v3/${decodeAccountKind(account_kind)}/${account_id}/viescolaire.awp?verbe=get`
