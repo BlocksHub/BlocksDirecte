@@ -48,6 +48,7 @@ export const FORMS_LIST = () => '/v3/edforms.awp?verbe=list';
 /* *************************************************************** */
 
 export const TIMETABLE_GET = (account_kind: AccountKind, account_id: number) => `/v3/${account_kind}/${account_id}/emploidutemps.awp?verbe=get`;
+export const TIMETABLE_ICS_GET = (account_kind: AccountKind, account_id: number) => `/v3/ical/${account_kind}/${account_id}/url.awp?verbe=get`;
 
 /* *************************************************************** */
 /* Modules - School Life                                           */
