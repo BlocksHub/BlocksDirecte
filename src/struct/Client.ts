@@ -3,27 +3,30 @@ import {Credential} from "../types/Credential";
 import {AuthModules} from "../modules/Auth";
 import {TimelineModules} from "../modules/Timeline";
 import {TimetableModules} from "../modules/Timetable";
-import {SchoolLife} from "../modules/SchoolLife";
-import {ClassLife} from "../modules/ClassLife";
+import {SchoolLifeModules} from "../modules/SchoolLife";
+import {ClassLifeModules} from "../modules/ClassLife";
+import {DownloaderModules} from "../modules/Downloader";
 
 export class Client {
     private restManager: RESTManager;
     private credentials: Credential = { accounts: [], selectedAccounts: -1 };
 
+    public downloader: DownloaderModules;
     public auth: AuthModules;
     public timeline: TimelineModules;
     public timetable: TimetableModules;
-    public schoollife: SchoolLife;
-    public classlife: ClassLife;
+    public schoollife: SchoolLifeModules;
+    public classlife: ClassLifeModules;
 
     constructor(credential?: Credential) {
         if (credential) this.credentials = credential;
         this.restManager = new RESTManager();
 
+        this.downloader = new DownloaderModules(this.restManager, this.credentials);
         this.auth = new AuthModules(this.restManager, this.credentials);
         this.timeline = new TimelineModules(this.restManager, this.credentials);
         this.timetable = new TimetableModules(this.restManager, this.credentials, "EDT");
-        this.schoollife = new SchoolLife(this.restManager, this.credentials, "VIE_SCOLAIRE");
-        this.classlife = new ClassLife(this.restManager, this.credentials, "VIE_DE_LA_CLASSE");
+        this.schoollife = new SchoolLifeModules(this.restManager, this.credentials, "VIE_SCOLAIRE");
+        this.classlife = new ClassLifeModules(this.restManager, this.credentials, "VIE_DE_LA_CLASSE");
     }
 }

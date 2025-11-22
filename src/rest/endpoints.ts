@@ -10,6 +10,12 @@ export const API_VERSION: string = '7.7.2';
 export const USER_AGENT: string = 'BlocksDirecte/1.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148  EDMOBILE v' + API_VERSION;
 
 /* *************************************************************** */
+/* Modules - Downloader                                            */
+/* *************************************************************** */
+
+export const DOWNLOADER_URL = (fileId: number, filetype: string) => `/v3/telechargement.awp?verbe=get&fichierId=${fileId}&leTypeDeFichier=${filetype}`;
+
+/* *************************************************************** */
 /* Modules - Auth                                                  */
 /* *************************************************************** */
 

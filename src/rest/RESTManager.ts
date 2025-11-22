@@ -99,4 +99,23 @@ export class RESTManager {
             headers: headers
         });
     }
+
+    async getStream(path: string, body: object, headers?: Record<string, string>): Promise<ReadableStream<Uint8Array<ArrayBuffer>> | null> {
+        const url = new URL(`${BASE_URL}${path}`);
+
+        const response = await fetch(url, {
+            method: "POST",
+            body: new URLSearchParams({
+                data: JSON.stringify(cleanJSON(body)),
+            }).toString(),
+            headers: {
+                "Content-Type": "x-www-form-urlencoded",
+                "User-Agent": USER_AGENT,
+                ...headers,
+            },
+            redirect: "manual",
+        });
+
+        return (response.body);
+    }
 }

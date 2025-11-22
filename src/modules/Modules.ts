@@ -3,6 +3,7 @@ import {Credential} from "../types/Credential";
 import {InvalidAccountSelected} from "../errors/InvalidAccountSelected";
 import {Module} from "../types/Module";
 import {Account} from "../types/Account";
+import {InvalidCredentials} from "../errors/InvalidCredentials";
 
 export class Modules {
     protected   restManager: RESTManager;
@@ -20,6 +21,11 @@ export class Modules {
         this.restManager = restManager;
         this.credentials = credentials;
         this.moduleName = moduleName;
+    }
+
+    protected checkToken(): void {
+        if (!this.credentials.token)
+            throw new InvalidCredentials("No token found in this client. Please login first.");
     }
 
     /**

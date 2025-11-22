@@ -1,7 +1,8 @@
 import {Modules} from "./Modules";
 import {SCHOOLLIFE_GET} from "../rest/endpoints";
+import {DownloaderModules} from "./Downloader";
 
-export class SchoolLife extends Modules {
+export class SchoolLifeModules extends Modules {
     public async getSchoolLife(): Promise<SchoolLife> {
         const account = this.getSelectedAccount();
 
