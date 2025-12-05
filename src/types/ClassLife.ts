@@ -1,5 +1,5 @@
-import {ClassLifeComment} from "./ClassLifeComment";
-import {ClassLifeFile} from "./ClassLifeFile";
+import {Comment} from "./Comment";
+import {CloudFile} from "./CloudFile";
 import {ClassLifeSubject} from "./ClassLifeSubject";
 
 export interface ClassLife {
@@ -7,7 +7,7 @@ export interface ClassLife {
     contenu: string;
     idCDT: number;
     profPrincipal: boolean;
-    commentaires: ClassLifeComment[];
-    fichiers: ClassLifeFile[];
+    commentaires: Comment[];
+    fichiers: CloudFile[];
     matieres: ClassLifeSubject;
 }

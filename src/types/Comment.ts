@@ -1,6 +1,6 @@
 import AccountKind from "./AccountKind";
 
-export interface ClassLifeComment {
+export interface Comment {
     id: number;
     idAuteur: number;
     profilAuteur: AccountKind;

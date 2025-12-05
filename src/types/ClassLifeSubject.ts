@@ -1,5 +1,5 @@
-import {ClassLifeComment} from "./ClassLifeComment";
-import {ClassLifeFile} from "./ClassLifeFile";
+import {Comment} from "./Comment";
+import {CloudFile} from "./CloudFile";
 
 export interface ClassLifeSubject {
     libelle: string;
@@ -7,6 +7,6 @@ export interface ClassLifeSubject {
     idCDT: number;
     dateMiseAJour: string;
     contenu: string;
-    commentaires: ClassLifeComment[];
-    fichiers: ClassLifeFile[];
+    commentaires: Comment[];
+    fichiers: CloudFile[];
 }

@@ -7,6 +7,7 @@ import {SchoolLifeModules} from "../modules/SchoolLife";
 import {ClassLifeModules} from "../modules/ClassLife";
 import {DownloaderModules} from "../modules/Downloader";
 import {MarkModules} from "../modules/Mark";
+import {HomeworkModules} from "../modules/Homework";
 
 
 export class Client {
@@ -20,6 +21,7 @@ export class Client {
     public schoollife: SchoolLifeModules;
     public classlife: ClassLifeModules;
     public marks: MarkModules;
+    public homework: HomeworkModules;
 
     constructor(credential?: Credential) {
         if (credential) this.credentials = credential;
@@ -32,5 +34,6 @@ export class Client {
         this.schoollife = new SchoolLifeModules(this.restManager, this.credentials, "VIE_SCOLAIRE");
         this.classlife = new ClassLifeModules(this.restManager, this.credentials, "VIE_DE_LA_CLASSE");
         this.marks = new MarkModules(this.restManager, this.credentials, "NOTES");
+        this.homework = new HomeworkModules(this.restManager, this.credentials, "CAHIER_DE_TEXTES");
     }
 }

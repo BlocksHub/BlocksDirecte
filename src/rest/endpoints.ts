@@ -1,5 +1,5 @@
 import AccountKind from "../types/AccountKind";
-import decodeAccountKind from "../utils/decodeAccountKind";
+import {decodeAccountKind, decodeAccountKindUppercase} from "../utils/decodeAccountKind";
 
 /* *************************************************************** */
 /* Base config                                                     */
@@ -73,4 +73,12 @@ export const CLASSLIFE_COMMENT_POST =  (account_kind: AccountKind, account_id: n
 /* Modules - Mark                                                  */
 /* *************************************************************** */
 
-export const MARKS_GET = (account_kind: AccountKind, account_id: number) => `/v3/${decodeAccountKind(account_kind)}/${account_id}/notes.awp?verbe=get`
+export const MARKS_GET = (account_kind: AccountKind, account_id: number) => `/v3/${decodeAccountKind(account_kind)}/${account_id}/notes.awp?verbe=get`;
+
+/* *************************************************************** */
+/* Modules - Homework                                              */
+/* *************************************************************** */
+
+export const HOMEWORK_DATE_GET = (account_kind: AccountKind, account_id: number, date: string) => `/v3/${decodeAccountKindUppercase(account_kind)}/${account_id}/cahierdetexte/${date}.awp?verbe=get`;
+export const HOMEWORK_GET = (account_kind: AccountKind, account_id: number) => `/v3/${decodeAccountKindUppercase(account_kind)}/${account_id}/cahierdetexte.awp?verbe=get`;
+export const HOMEWORK_PUT = (account_kind: AccountKind, account_id: number) => `/v3/${decodeAccountKindUppercase(account_kind)}/${account_id}/cahierdetexte.awp?verbe=put`;

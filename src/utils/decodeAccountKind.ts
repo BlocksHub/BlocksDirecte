@@ -15,4 +15,19 @@ function decodeAccountKind(account_kind: AccountKind) {
 	}
 }
 
-export default decodeAccountKind;
+function decodeAccountKindUppercase(account_kind: AccountKind) {
+    switch (account_kind) {
+        case AccountKind.Student:
+            return "Eleves";
+        case AccountKind.Family1:
+            return "Familles";
+        case AccountKind.Family2:
+            return "Familles";
+        case AccountKind.Staff:
+            return "Personnels";
+        case AccountKind.Teacher:
+            return "Enseignants";
+    }
+}
+
+export { decodeAccountKind, decodeAccountKindUppercase };

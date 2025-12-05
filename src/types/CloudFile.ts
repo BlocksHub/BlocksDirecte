@@ -1,4 +1,4 @@
-export interface ClassLifeFile {
+export interface CloudFile {
     id: number;
     libelle: string;
     taille: number;

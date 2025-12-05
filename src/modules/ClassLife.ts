@@ -1,7 +1,7 @@
 import {Modules} from "./Modules";
 import {CLASSLIFE_COMMENT_POST, CLASSLIFE_GET} from "../rest/endpoints";
 import {decodeBase64JSON} from "../utils/json";
-import {ClassLifeCommentId} from "../types/ClassLifeCommentId";
+import {CommentId} from "../types/CommentId";
 import {encodeBase64} from "../utils/base64";
 import {ClassLife} from "../types/ClassLife";
 
@@ -22,7 +22,7 @@ export class ClassLifeModules extends Modules {
         return decodeBase64JSON(res.data);
     }
 
-    public async postComment(message: string, contentId: number): Promise<ClassLifeCommentId> {
+    public async postComment(message: string, contentId: number): Promise<CommentId> {
         const account = this.getSelectedAccount();
         const encodedMessage = encodeBase64(message);
 
