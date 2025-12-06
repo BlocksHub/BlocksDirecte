@@ -12,6 +12,7 @@ import {encodeBase64} from "../utils/base64";
 import {BadAnswer2FA} from "../errors/BadAnswer2FA";
 import {InvalidAccountSelected} from "../errors/InvalidAccountSelected";
 import {Account} from "../types/Account";
+import AccountKind from "../types/AccountKind";
 
 export class AuthModules extends Modules {
     public async loginUsername(
@@ -19,7 +20,6 @@ export class AuthModules extends Modules {
         password: string,
         cnKey?: string,
         cvKey?: string,
-        isRelogin?: boolean,
         keepSessionOpen?: boolean,
         deviceUUID?: string
     ): Promise<AuthentificationCredentialWithToken> {
@@ -28,7 +28,7 @@ export class AuthModules extends Modules {
         const res: ServerResponse<AuthentificationCredential> = await this.restManager.post<AuthentificationCredential>(
             AUTH_LOGIN(),
             {
-                isReLogin: isRelogin ?? undefined,
+                isReLogin: false,
                 identifiant: username,
                 motdepasse: password,
                 cn: cnKey ?? undefined,
@@ -43,6 +43,46 @@ export class AuthModules extends Modules {
                 throw new Require2FA("Your account require 2FA to login.", res.headers.get("x-token")!);
             case 505:
                 throw new InvalidCredentials("Username or password is invalid.");
+            default:
+                Object.assign(this.credentials, {token: res.token, accounts: res.data.accounts});
+                return {...res.data, token: res.token}
+        }
+    }
+
+    public async refreshToken(
+        username: string,
+        accountKind: AccountKind,
+        token: string,
+        cnKey?: string,
+        cvKey?: string,
+        deviceUUID?: string
+    ): Promise<AuthentificationCredentialWithToken> {
+
+        const res: ServerResponse<AuthentificationCredential> = await this.restManager.post<AuthentificationCredential>(
+            AUTH_LOGIN(),
+            {
+                identifiant: username,
+                uuid: deviceUUID,
+                isReLogin: true,
+                motdepasse: "",
+                typeCompte: accountKind,
+                accesstoken: token,
+                fa: [
+                    {
+                        cn: cnKey,
+                        cv: cvKey
+                    }
+                ],
+            }
+        );
+
+        console.log(res.message);
+
+        switch (res.code) {
+            case 250:
+                throw new Require2FA("Your account require 2FA to login.", res.headers.get("x-token")!);
+            case 505:
+                throw new InvalidCredentials("Username or token is invalid.");
             default:
                 Object.assign(this.credentials, {token: res.token, accounts: res.data.accounts});
                 return {...res.data, token: res.token}
