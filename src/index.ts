@@ -17,6 +17,7 @@ export * from "./types/DoubleAuthResult";
 export * from "./types/Module";
 export * from "./types/RequestHandler";
 export * from "./types/ServerResponse";
+export * from "./types/SchoolLifeConductItem";
 
 /* *************************************************************** */
 /* Errors                                                          */

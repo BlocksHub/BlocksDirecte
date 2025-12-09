@@ -1,15 +1,44 @@
 {
-  "name": "blocksdirecte",
+  "name": "@blockshub/blocksdirecte",
   "version": "0.0.1-alpha",
   "description": "A Wrapper for EcoleDirecte",
-  "main": "dist/index.js",
+  "homepage": "https://github.com/BlocksHub/BlocksDirecte#readme",
+  "bugs": {
+    "url": "https://github.com/BlocksHub/BlocksDirecte/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BlocksHub/BlocksDirecte.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "exports": {
+    "import": {
+      "types": "./dist/index.d.mts",
+      "default": "./dist/index.mjs"
+    },
+    "require": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "directories": {
+    "example": "examples"
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "build": "tsc",
+    "build": "bunup",
     "example:login": "bun run --env-file=examples/.env examples/login.ts"
   },
-  "dependencies": {},
   "devDependencies": {
-    "typescript": "^5.5.3",
-    "ts-node": "^10.9.2"
-  }
+    "bunup": "^0.16.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.3"
+  },
+  "module": "./dist/index.mjs"
 }
