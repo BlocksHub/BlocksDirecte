@@ -64,7 +64,7 @@ export class AuthModules extends Modules {
                 identifiant: username,
                 uuid: deviceUUID,
                 isReLogin: true,
-                motdepasse: "",
+                motdepasse: "???",
                 typeCompte: accountKind,
                 accesstoken: token,
                 fa: [
