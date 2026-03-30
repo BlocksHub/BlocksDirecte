@@ -1,7 +1,7 @@
 export interface MarkSkill {
     descriptif: string;
     idElemProg: number;
-    valeur: "2"; // Max 4
+    valeur: "1" | "2" | "3" | "4";
     cdt: boolean;
     idCompetence: number;
     idConnaissance: number;
