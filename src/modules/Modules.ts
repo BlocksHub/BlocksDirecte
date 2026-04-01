@@ -4,6 +4,7 @@ import {InvalidAccountSelected} from "../errors/InvalidAccountSelected";
 import {Module} from "../types/Module";
 import {Account} from "../types/Account";
 import {InvalidCredentials} from "../errors/InvalidCredentials";
+import {UnsupportedModule} from "../errors/UnsupportedModule";
 
 export class Modules {
     protected   restManager: RESTManager;
@@ -54,9 +55,19 @@ export class Modules {
         return (typeof module !== "undefined");
     }
 
-    protected getSelectedAccount(): Account
+    protected getSelectedAccountWithModuleName(moduleName: string | undefined): Account
     {
         this.checkSelectedAccount();
-        return (this.credentials.accounts[this.credentials.selectedAccounts]);
+
+        const account: Account = this.credentials.accounts[this.credentials.selectedAccounts];
+
+        if (moduleName !== undefined && !this.isModuleAvailableForSelectedAccount())
+            throw new UnsupportedModule(`The selected account does not support the module "${this.moduleName}"`);
+        return (account);
+    }
+
+    protected getSelectedAccount(): Account
+    {
+        return this.getSelectedAccountWithModuleName(this.moduleName);
     }
 }
