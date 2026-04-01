@@ -82,3 +82,9 @@ export const MARKS_GET = (account_kind: AccountKind, account_id: number) => `/v3
 export const HOMEWORK_DATE_GET = (account_kind: AccountKind, account_id: number, date: string) => `/v3/${decodeAccountKindUppercase(account_kind)}/${account_id}/cahierdetexte/${date}.awp?verbe=get`;
 export const HOMEWORK_GET = (account_kind: AccountKind, account_id: number) => `/v3/${decodeAccountKindUppercase(account_kind)}/${account_id}/cahierdetexte.awp?verbe=get`;
 export const HOMEWORK_PUT = (account_kind: AccountKind, account_id: number) => `/v3/${decodeAccountKindUppercase(account_kind)}/${account_id}/cahierdetexte.awp?verbe=put`;
+
+/* *************************************************************** */
+/* Modules - WalletS                                               */
+/* *************************************************************** */
+
+export const WALLETS_DETAILS = () => '/v3/comptes/detail.awp?verbe=get';
