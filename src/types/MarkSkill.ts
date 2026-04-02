@@ -1,7 +1,7 @@
 export enum MarkSkillValue {
-    ABSENT = 'abs',
-    EXEMPT = 'disp',
-    NOT_RATED = 'ne',
+    ABSENT = '-1',
+    EXEMPT = '-2',
+    NOT_RATED = '-3',
     NOT_ACHIEVED = '1',
     PARTIALLY_ACHIEVED = '2',
     ACHIEVED = '3',
