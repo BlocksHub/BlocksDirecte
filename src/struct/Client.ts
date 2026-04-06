@@ -39,4 +39,8 @@ export class Client {
         this.homework = new HomeworkModules(this.restManager, this.credentials, "CAHIER_DE_TEXTES");
         this.wallets = new WalletsModule(this.restManager, this.credentials, "SITUATION_FINANCIERE");
     }
+
+    public getToken2FA(): string | undefined {
+        return this.credentials.token2fa;
+    }
 }

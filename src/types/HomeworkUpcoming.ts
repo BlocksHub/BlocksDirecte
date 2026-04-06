@@ -8,7 +8,7 @@ export type Year = `${number}${number}${number}${number}`
 
 export type ISODate = `${Year}-${Month}-${Day}`;
 
-export type HomeworkUpcoming = Record<ISODate, {
+export interface HomeworkUpcomingItem {
     aFaire: boolean,
     codeMatiere: string,
     documentsAFaire: boolean,
@@ -19,4 +19,6 @@ export type HomeworkUpcoming = Record<ISODate, {
     matiere: string,
     rendreEnLigne: boolean,
     tags: HomeworkTags[]
-}>;
+}
+
+export type HomeworkUpcoming = Record<ISODate, HomeworkUpcomingItem[]>;

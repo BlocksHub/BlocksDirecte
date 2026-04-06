@@ -43,9 +43,11 @@ export class AuthModules extends Modules {
                 throw new Require2FA("Your account require 2FA to login.", res.headers.get("x-token")!);
             case 505:
                 throw new InvalidCredentials("Username or password is invalid.");
-            default:
-                Object.assign(this.credentials, {token: res.token, accounts: res.data.accounts});
+            default: {
+                const token2fa = res.headers.get("2fa-token") ?? this.credentials.token2fa ?? undefined;
+                Object.assign(this.credentials, {token: res.token, token2fa, accounts: res.data.accounts});
                 return {...res.data, token: res.token}
+            }
         }
     }
 
@@ -76,16 +78,16 @@ export class AuthModules extends Modules {
             }
         );
 
-        console.log(res.message);
-
         switch (res.code) {
             case 250:
                 throw new Require2FA("Your account require 2FA to login.", res.headers.get("x-token")!);
             case 505:
                 throw new InvalidCredentials("Username or token is invalid.");
-            default:
-                Object.assign(this.credentials, {token: res.token, accounts: res.data.accounts});
+            default: {
+                const token2fa = res.headers.get("2fa-token") ?? this.credentials.token2fa ?? undefined;
+                Object.assign(this.credentials, {token: res.token, token2fa, accounts: res.data.accounts});
                 return {...res.data, token: res.token}
+            }
         }
     }
 
