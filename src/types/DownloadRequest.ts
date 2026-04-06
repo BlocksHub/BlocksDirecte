@@ -17,4 +17,6 @@ export interface BinaryRequest {
 export interface BinaryResponse {
     data: ArrayBuffer;
     contentType?: string;
+    contentDisposition?: string;
+    fileName?: string;
 }

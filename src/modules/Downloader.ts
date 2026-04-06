@@ -2,11 +2,31 @@ import {Modules} from "./Modules";
 import {BASE_URL, DOWNLOADER_URL, USER_AGENT} from "../rest/endpoints";
 import {cleanJSON} from "../utils/json";
 import {BinaryRequest, BinaryResponse, DownloadBodyParams, DownloadRequest} from "../types/DownloadRequest";
+import {CloudFile} from "../types/CloudFile";
 
 const ECOLEDIRECTE_ORIGIN = "https://www.ecoledirecte.com";
 const PROFILE_PHOTO_ACCEPT = "image/avif,image/webp,image/png,image/svg+xml,image/*;q=0.8,*/*;q=0.5";
 
 export class DownloaderModules extends Modules {
+    private async executeBinaryRequest(request: BinaryRequest): Promise<BinaryResponse> {
+        const response = await fetch(request.url, {
+            method: request.method,
+            headers: request.headers,
+            body: request.body,
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch binary resource (${response.status} ${response.statusText})`);
+        }
+
+        return {
+            data: await response.arrayBuffer(),
+            contentType: response.headers.get("content-type") ?? undefined,
+            contentDisposition: response.headers.get("content-disposition") ?? undefined,
+            fileName: getResponseFileName(response.headers.get("content-disposition") ?? undefined),
+        };
+    }
+
     private getDownloadData(bodyParams?: DownloadBodyParams): Record<string, string | number | boolean> {
         return cleanJSON({ forceDownload: 0, ...bodyParams });
     }
@@ -37,6 +57,30 @@ export class DownloaderModules extends Modules {
             headers: this.getDownloadHeaders(),
             body: this.getDownloadBody(bodyParams),
         };
+    }
+
+    public getBinaryDownloadRequest(fileId: string | number, fileType: string, bodyParams?: DownloadBodyParams): BinaryRequest {
+        const request = this.getDownloadRequest(fileId, fileType, bodyParams);
+        return {
+            url: request.url,
+            method: request.method,
+            headers: request.headers,
+            body: request.body,
+        };
+    }
+
+    public async getDownloadBinary(fileId: string | number, fileType: string, bodyParams?: DownloadBodyParams): Promise<BinaryResponse> {
+        return await this.executeBinaryRequest(
+            this.getBinaryDownloadRequest(fileId, fileType, bodyParams)
+        );
+    }
+
+    public getCloudFileRequest(file: CloudFile, bodyParams?: DownloadBodyParams): BinaryRequest {
+        return this.getBinaryDownloadRequest(file.id, file.type, bodyParams);
+    }
+
+    public async getCloudFile(file: CloudFile, bodyParams?: DownloadBodyParams): Promise<BinaryResponse> {
+        return await this.executeBinaryRequest(this.getCloudFileRequest(file, bodyParams));
     }
 
     public async getStream(fileId: string | number, fileType: string, bodyParams?: DownloadBodyParams): Promise<ReadableStream<Uint8Array<ArrayBuffer>> | null> {
@@ -96,18 +140,41 @@ export class DownloaderModules extends Modules {
             return null;
         }
 
-        const response = await fetch(request.url, {
-            method: request.method,
-            headers: request.headers,
-        });
+        return await this.executeBinaryRequest(request);
+    }
+}
 
-        if (!response.ok) {
-            throw new Error(`Failed to fetch profile photo (${response.status} ${response.statusText})`);
+function getResponseFileName(contentDisposition?: string): string | undefined {
+    if (!contentDisposition) {
+        return undefined;
+    }
+
+    const encodedMatch = contentDisposition.match(/filename\*\s*=\s*(?:UTF-8''|utf-8'')?([^;]+)/i);
+    if (encodedMatch?.[1]) {
+        const decoded = decodeContentDispositionValue(encodedMatch[1]);
+        if (decoded) {
+            return decoded;
         }
+    }
 
-        return {
-            data: await response.arrayBuffer(),
-            contentType: response.headers.get("content-type") ?? undefined,
-        };
+    const quotedMatch = contentDisposition.match(/filename\s*=\s*"([^"]+)"/i);
+    if (quotedMatch?.[1]) {
+        return quotedMatch[1].trim();
+    }
+
+    const plainMatch = contentDisposition.match(/filename\s*=\s*([^;]+)/i);
+    return plainMatch?.[1]?.trim();
+}
+
+function decodeContentDispositionValue(value: string): string | undefined {
+    const normalizedValue = value.trim().replace(/^"(.*)"$/, "$1");
+    if (!normalizedValue) {
+        return undefined;
+    }
+
+    try {
+        return decodeURIComponent(normalizedValue);
+    } catch {
+        return normalizedValue;
     }
 }
