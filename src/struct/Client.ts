@@ -10,7 +10,31 @@ import {MarkModules} from "../modules/Mark";
 import {HomeworkModules} from "../modules/Homework";
 import {WalletsModule} from "../modules/Wallets";
 
-
+/**
+ * Client principale pour réagir avec l'API d'ÉcoleDirecte.
+ *
+ * Cette classe centralise l’ensemble des modules disponibles et gère
+ * la configuration commune (authentification, requêtes HTTP, comptes).
+ *
+ * Chaque module exposé permet d’accéder à une partie spécifique des données :
+ * emploi du temps, notes, devoirs, vie scolaire, etc.
+ *
+ * @example
+ * // Initialize a new client
+ * const client = new Client();
+ *
+ * // Login to an ED account and then select the first account
+ * tokens = await client.auth.loginUsername(username, password);
+ * client.auth.setAccount(0);
+ *
+ * // Get account details
+ * const account = client.auth.getAccount();
+ * console.log(account);
+ *
+ * @constructor
+ * @param [credential] {Credential} Identifiants optionnels utilisés pour initialiser le client.
+ * @return {Client} Client ÉcoleDirecte
+ */
 export class Client {
     private restManager: RESTManager;
     private credentials: Credential = { accounts: [], selectedAccounts: -1 };
