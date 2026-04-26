@@ -33,10 +33,11 @@
   ],
   "scripts": {
     "build": "bunup",
-	"docs": "typedoc",
+    "docs": "typedoc",
     "example:login": "bun run --env-file=examples/.env examples/login.ts"
   },
   "devDependencies": {
+    "@unikue/typedoc-theme-dumi": "^1.0.0",
     "bunup": "^0.16.10",
     "ts-node": "^10.9.2",
     "typedoc": "^0.28.19",

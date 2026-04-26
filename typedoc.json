@@ -1,0 +1,14 @@
+{
+	"plugin": [
+		"@unikue/typedoc-theme-dumi"
+	],
+	"theme": "dumi",
+	"projectDocuments": ["documentation/*.md"],
+	"logoTitle": "BlocksDirecte",
+	"navigationLinks": {
+		"GitHub": "https://github.com/BlocksHub/BlocksDirecte",
+		"Papillon": "https://papillon.bzh"
+	},
+	"navigationLinkTargets": {},
+	"footerAlign": "center"
+}
