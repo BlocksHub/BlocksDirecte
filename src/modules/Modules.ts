@@ -29,6 +29,16 @@ export class Modules {
             throw new InvalidCredentials("No token found in this client. Please login first.");
     }
 
+    protected getAuthHeaders(extraHeaders: Record<string, string> = {}): Record<string, string> {
+        this.checkToken();
+
+        return {
+            "X-Token": this.credentials.token!,
+            ...(this.credentials.token2fa ? { "2FA-Token": this.credentials.token2fa } : {}),
+            ...extraHeaders,
+        };
+    }
+
     /**
      * Check if the current selected account is valid.
      * @private
@@ -50,8 +60,10 @@ export class Modules {
     protected isModuleAvailableForSelectedAccount(): boolean {
         if (!this.moduleName) throw new Error("[Developer note] 'moduleName' is unset. Make sure you're initialising the module with it before using this function.");
 
-        const accounts = this.getSelectedAccount();
-        let module: Module | undefined = accounts.modules.find((module) => module.code === this.moduleName );
+        this.checkSelectedAccount();
+
+        const account = this.credentials.accounts[this.credentials.selectedAccounts];
+        let module: Module | undefined = account.modules.find((item) => item.code === this.moduleName );
         return (typeof module !== "undefined");
     }
 
@@ -61,8 +73,11 @@ export class Modules {
 
         const account: Account = this.credentials.accounts[this.credentials.selectedAccounts];
 
-        if (moduleName !== undefined && !this.isModuleAvailableForSelectedAccount())
-            throw new UnsupportedModule(`The selected account does not support the module "${this.moduleName}"`);
+        if (moduleName !== undefined) {
+            const module: Module | undefined = account.modules.find((item) => item.code === moduleName);
+            if (typeof module === "undefined")
+                throw new UnsupportedModule(`The selected account does not support the module "${moduleName}"`);
+        }
         return (account);
     }
 

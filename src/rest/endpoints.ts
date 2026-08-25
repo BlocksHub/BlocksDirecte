@@ -13,7 +13,7 @@ export const USER_AGENT: string = 'BlocksDirecte/1.0 (iPhone; CPU iPhone OS 18_7
 /* Modules - Downloader                                            */
 /* *************************************************************** */
 
-export const DOWNLOADER_URL = (fileId: number, filetype: string) => `/v3/telechargement.awp?verbe=get&fichierId=${fileId}&leTypeDeFichier=${filetype}`;
+export const DOWNLOADER_URL = (fileId: string | number, filetype: string) => `/v3/telechargement.awp?verbe=get&fichierId=${fileId}&leTypeDeFichier=${filetype}`;
 
 /* *************************************************************** */
 /* Modules - Auth                                                  */
