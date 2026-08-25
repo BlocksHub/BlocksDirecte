@@ -40,7 +40,7 @@ export class AuthModules extends Modules {
 
         switch (res.code) {
             case 250:
-                throw new Require2FA("Your account require 2FA to login.", res.headers.get("x-token")!);
+                throw new Require2FA("Your account require 2FA to login.", res.headers.get("2fa-token")!);
             case 505:
                 throw new InvalidCredentials("Username or password is invalid.");
             default:
@@ -93,7 +93,7 @@ export class AuthModules extends Modules {
         const res: ServerResponse<DoubleAuthQuestions> = await this.restManager.post(
             AUTH_2FA_GET(),
             {},
-            {"X-Token": token}
+            {"2fa-token": token}
         );
 
         if (res.code === 520) throw new Invalid2FAKey(`Token is invalid.`);
@@ -107,7 +107,7 @@ export class AuthModules extends Modules {
             {
                 choix: encodeBase64(response),
             },
-            {"X-Token": token}
+            {"2fa-token": token}
         );
 
         switch (res.code) {
